@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALASKA UNDERGROUND DEPARTMENT</title>
+    <link rel="icon" type="image/png" href="/image/logo.png">
+    <style>
+        /* --- FONT --- */
+        /* This imports a font similar to the one in the image */
+        @import url('https://fonts.googleapis.com/css2?family=Tinos:wght@700&family=Roboto:wght@400&display=swap');
+
+        /* --- BASIC SETUP --- */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0; /* Fallback color */
+            
+            /* --- BACKGROUND IMAGE --- */
+            background-image: url('./image/main.jpg'); 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* --- MAIN TITLE --- */
+        .main-title {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #000;
+            font-family: 'Tinos', serif; /* Special font for the title */
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            white-space: nowrap; /* Prevents title from wrapping on small screens */
+        }
+
+        /* --- LOGIN FORM CONTAINER --- */
+        .login-container {
+            background-color: rgba(220, 220, 220, 0.9); /* Light grey with slight transparency */
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin: 0 0 30px 0;
+            font-family: 'Tinos', serif;
+            color: #333;
+            letter-spacing: 1px;
+            font-size: 1.5rem;
+        }
+
+        /* --- FORM FIELDS --- */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.75rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Important for padding and width */
+            font-size: 1rem;
+        }
+
+        /* --- LOGIN BUTTON --- */
+        .login-button {
+            background-color: #f9f9f9;
+            color: #333;
+            border: 1px solid #bbb;
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            margin-top: 10px; /* Space above the button */
+        }
+
+        .login-button:hover {
+            background-color: #e9e9e9;
+            border-color: #999;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 600px) {
+            .main-title {
+                font-size: 1.5rem;
+                padding: 0 10px;
+            }
+            .login-container {
+                padding: 30px;
+                margin: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>LOG IN</h2>
+        <form action="Dashboard.html" method="post">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <button type="submit" class="login-button">Log In</button>
+        </form>
+    </div>
+
+</body>
+</html>
