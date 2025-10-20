@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sales Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Alfa+Slab+One&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-alfa { font-family: 'Alfa Slab One', cursive; text-shadow: 1px 1px 1px rgba(0,0,0,0.1); }
+    .sidebar-link.active { background-color: #e5e7eb; color: #1f2937; }
+    .sidebar-link.active svg { color: #719cd8; }
+    .modal-open { overflow: hidden; }
+
+    /* Toasts (top-right, minimal white with colored left border) */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-end;
+      pointer-events: none;
+    }
+    .toast {
+      pointer-events: auto;
+      min-width: 260px;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      transform-origin: top right;
+      animation: toast-in .12s ease;
+    }
+    .toast .left-border { width: 6px; height: 100%; }
+    .toast .content { padding: 0.75rem 0.85rem; flex: 1; }
+    .toast .actions { padding: 0 0.75rem 0.75rem 0; display:flex; align-items:center; gap:.5rem; }
+    .toast .undo { color: #2563eb; text-decoration: underline; cursor: pointer; font-weight:600; }
+    @keyframes toast-in { from { opacity: 0; transform: translateY(-6px) scale(0.98); } to { opacity:1; transform: translateY(0) scale(1); } }
+    @keyframes toast-out { from { opacity:1; transform: translateY(0) scale(1); } to { opacity:0; transform: translateY(-6px) scale(.98); } }
+
+    /* subtle available stock text */
+    .available-stock { font-size: .9rem; color:#6b7280; font-style: italic; margin-top: .25rem; }
+
+    /* invalid input */
+    .invalid { border-color: #ef4444 !important; box-shadow: 0 0 0 3px rgba(239,68,68,0.06); }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <div class="h-screen flex overflow-hidden">
+    <!-- Sidebar (UNCHANGED) -->
+    <aside class="w-64 bg-white flex flex-col border-r flex-shrink-0">
+      <div class="h-20 flex items-center justify-center border-b">
+        <h1 class="font-alfa text-4xl tracking-wider">AUG DEPT.</h1>
+      </div>
+      <nav class="flex-1 px-4 py-6 space-y-2">
+        <a href="Dashboard.html" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+          Dashboard
+        </a>
+
+        <a href="#" class="sidebar-link active flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+          Sales
+        </a>
+
+        <a href="Inventory.html" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+          Inventory
+        </a>
+
+        <a href="#" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 00-4-4H3a2 2 0 00-2 2v6a2 2 0 002 2h2a4 4 0 004-4zm0 0v-2a4 4 0 014-4h2a4 4 0 014 4v2m-6 4h6m-6-4v6m0-6H9" /></svg>
+          Reports
+        </a>
+
+      </nav>
+
+      <div class="px-4 py-6 border-t border-gray-200">
+        <a href="#" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+          Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-8 overflow-y-auto">
+      <h2 class="text-3xl font-bold mb-8">Sales</h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Sales Entry Card -->
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+          <h3 class="text-xl font-semibold mb-6">Sales Entry</h3>
+
+          <form id="salesForm" class="space-y-4" onsubmit="return false;">
+            <div>
+              <label for="productSelect" class="block text-sm font-medium text-gray-700 mb-1">Product</label>
+              <select id="productSelect" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Choose a product</option>
+                <option value="shirts">Shirts</option>
+                <option value="cap">Cap</option>
+                <option value="umbrella">Umbrella</option>
+                <option value="perfume">Perfume</option>
+              </select>
+              <div id="availableStock" class="available-stock" style="display:none;"></div>
+            </div>
+
+            <div>
+              <label for="dateTime" class="block text-sm font-medium text-gray-700 mb-1">Date / Time</label>
+              <input id="dateTime" type="text" readonly class="w-full bg-gray-100 border-gray-300 rounded-md shadow-sm px-3 py-2" />
+            </div>
+
+            <div>
+              <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+              <input id="quantity" type="number" min="1" value="1" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+
+            <div>
+              <label for="total" class="block text-sm font-medium text-gray-700 mb-1">Total (₱)</label>
+              <input id="total" type="text" readonly class="w-full bg-gray-100 border-gray-300 rounded-md shadow-sm px-3 py-2" />
+            </div>
+
+            <div>
+              <button id="addToSalesBtn" type="button" disabled class="w-full py-2.5 px-4 bg-gray-800 text-white font-semibold rounded-md shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 disabled:opacity-60">
+                Add to Sales
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Sales Record Card -->
+        <div class="bg-white p-6 rounded-lg border border-gray-200">
+          <h3 class="text-xl font-semibold mb-6">Sales Record</h3>
+
+          <!-- Search / Filter -->
+          <div class="flex gap-3 items-center mb-4">
+            <div class="relative flex-1">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+              </div>
+              <input id="searchSales" type="text" placeholder="Search (product or date/time)" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+
+            <select id="filterProduct" class="w-40 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+              <option value="all">All Products</option>
+              <option value="shirts">Shirts</option>
+              <option value="cap">Cap</option>
+              <option value="umbrella">Umbrella</option>
+              <option value="perfume">Perfume</option>
+            </select>
+          </div>
+
+          <!-- Table Header -->
+          <div class="flex text-sm font-semibold text-gray-600 bg-gray-50 px-4 py-3 border border-b-0 border-gray-200 rounded-t-lg">
+            <div class="w-1/4">Date / Time</div>
+            <div class="w-1/5">Product</div>
+            <div class="w-1/6">Qty</div>
+            <div class="w-1/4">Total</div>
+            <div class="w-1/6 text-right">Actions</div>
+          </div>
+
+          <!-- Table Body -->
+          <div id="salesTable" class="divide-y divide-gray-200 min-h-[160px]">
+            <div id="salesEmpty" class="px-4 py-8 text-center text-gray-500">
+              No sales yet — add a sale from the left panel.
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Edit Modal (reused for editing a sale) -->
+  <div id="editModal" class="fixed inset-0 z-50 hidden items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-lg mx-auto z-50 p-6">
+      <h3 class="text-xl font-semibold mb-4">Edit Sale</h3>
+
+      <form id="editForm" onsubmit="return false;" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Date / Time</label>
+          <input id="editDateTime" type="text" readonly class="w-full bg-gray-100 border-gray-300 rounded-md shadow-sm px-3 py-2" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Product</label>
+          <select id="editProduct" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <option value="shirts">Shirts</option>
+            <option value="cap">Cap</option>
+            <option value="umbrella">Umbrella</option>
+            <option value="perfume">Perfume</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Quantity</label>
+          <input id="editQty" type="number" min="1" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+          <div id="editAvailable" class="available-stock" style="display:none;"></div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Total (₱)</label>
+          <input id="editTotal" type="text" readonly class="w-full bg-gray-100 border-gray-300 rounded-md shadow-sm px-3 py-2" />
+        </div>
+
+        <div class="flex justify-end gap-3 pt-2">
+          <button id="cancelEditBtn" type="button" class="px-4 py-2 rounded-md bg-white border border-gray-300 hover:bg-gray-50">Cancel</button>
+          <button id="saveEditBtn" type="button" class="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center px-4">
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md mx-auto z-50 p-6">
+      <h3 class="text-lg font-semibold mb-2">Confirm Delete</h3>
+      <p id="deleteText" class="text-sm text-gray-600">Are you sure you want to delete this sale?</p>
+
+      <div class="flex justify-end gap-3 pt-6">
+        <button id="cancelDelete" class="px-4 py-2 rounded-md bg-white border border-gray-300 hover:bg-gray-50">No</button>
+        <button id="confirmDelete" class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">Yes, delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script>
+    /***************************************
+     * Sales.html (connected)
+     * - localStorage.salesData
+     * - localStorage.inventoryData adjustments on sale add/edit/delete
+     * - available stock hint below product dropdown (subtle, disappears if none)
+     * - blocks sale if insufficient inventory
+     * - toasts & undo for edit/delete (undo restores sale & inventory)
+     ***************************************/
+
+    // Config
+    const PRODUCT_PRICES = { shirts: 200, cap: 100, umbrella: 200, perfume: 500 };
+    const LOW_STOCK_THRESHOLD = 20; // used by inventory display (inventory page handles highlight)
+
+    // DOM refs
+    const productSelect = document.getElementById('productSelect');
+    const dateTimeInput = document.getElementById('dateTime');
+    const quantityInput = document.getElementById('quantity');
+    const totalInput = document.getElementById('total');
+    const addToSalesBtn = document.getElementById('addToSalesBtn');
+
+    const availableStockEl = document.getElementById('availableStock');
+
+    const searchSales = document.getElementById('searchSales');
+    const filterProduct = document.getElementById('filterProduct');
+    const salesTable = document.getElementById('salesTable');
+    const salesEmpty = document.getElementById('salesEmpty');
+
+    // Edit/Delete modal refs
+    const editModal = document.getElementById('editModal');
+    const editDateTime = document.getElementById('editDateTime');
+    const editProduct = document.getElementById('editProduct');
+    const editQty = document.getElementById('editQty');
+    const editTotal = document.getElementById('editTotal');
+    const saveEditBtn = document.getElementById('saveEditBtn');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const editAvailable = document.getElementById('editAvailable');
+
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteText = document.getElementById('deleteText');
+    const confirmDelete = document.getElementById('confirmDelete');
+    const cancelDelete = document.getElementById('cancelDelete');
+
+    const toastContainer = document.getElementById('toastContainer');
+
+    // Undo state
+    let lastDeleted = null; // { sale, timeoutId }
+    let lastEdited = null;  // { oldSale, timeoutId }
+
+    // Helpers: localStorage read/write
+    function getSalesData() {
+      try {
+        const raw = localStorage.getItem('salesData');
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed;
+      } catch (e) { console.warn(e); return []; }
+    }
+    function setSalesData(arr) {
+      localStorage.setItem('salesData', JSON.stringify(arr));
+      window.dispatchEvent(new Event('storage'));
+    }
+
+    function getInventoryData() {
+      try {
+        const raw = localStorage.getItem('inventoryData');
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed;
+      } catch (e) { console.warn(e); return []; }
+    }
+    function setInventoryData(arr) {
+      localStorage.setItem('inventoryData', JSON.stringify(arr));
+      window.dispatchEvent(new Event('storage'));
+    }
+
+    // Utility: find inventory item by product key
+    function findInventoryItem(productKey) {
+      const inv = getInventoryData();
+      return inv.find(i => (i.product || '').toString().toLowerCase() === (productKey || '').toString().toLowerCase());
+    }
+
+    // Format date/time
+    function formatDateTime(date) {
+      const d = new Date(date);
+      const options = { year: 'numeric', month: 'long', day: '2-digit' };
+      const datePart = new Intl.DateTimeFormat('en-US', options).format(d);
+      let hours = d.getHours();
+      const minutes = String(d.getMinutes()).padStart(2,'0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12; hours = hours ? hours : 12;
+      return `${datePart} - ${hours}:${minutes} ${ampm}`;
+    }
+
+    function updateCurrentDateTimeField() {
+      dateTimeInput.value = formatDateTime(new Date());
+    }
+
+    // compute total
+    function computeTotalFor(productKey, qty) {
+      const price = PRODUCT_PRICES[productKey] || 0;
+      return price * qty;
+    }
+
+    // show available stock (subtle)
+    function updateAvailableStockDisplay(productKey) {
+      if (!productKey) {
+        availableStockEl.style.display = 'none';
+        availableStockEl.textContent = '';
+        validateAddButton();
+        return;
+      }
+      const item = findInventoryItem(productKey);
+      if (!item) {
+        // if no inventory record, hide (as user requested subtle disappear)
+        availableStockEl.style.display = 'none';
+        availableStockEl.textContent = '';
+        validateAddButton();
+        return;
+      }
+      availableStockEl.style.display = 'block';
+      availableStockEl.textContent = `Available stock: ${Number(item.quantity)} pcs`;
+      validateAddButton();
+    }
+
+    // validate whether add button should be enabled (product chosen + qty >0 + qty <= available)
+    function validateAddButton() {
+      const product = productSelect.value;
+      const qty = Math.max(1, Number(quantityInput.value) || 1);
+
+      if (!product) {
+        addToSalesBtn.disabled = true;
+        quantityInput.classList.remove('invalid');
+        return;
+      }
+      const inv = findInventoryItem(product);
+      if (!inv) {
+        // no inventory record => treat as 0 available => block add
+        addToSalesBtn.disabled = true;
+        quantityInput.classList.add('invalid');
+        return;
+      }
+      if (qty <= 0) {
+        addToSalesBtn.disabled = true;
+        quantityInput.classList.add('invalid');
+        return;
+      }
+      if (qty > Number(inv.quantity)) {
+        addToSalesBtn.disabled = true;
+        quantityInput.classList.add('invalid');
+      } else {
+        addToSalesBtn.disabled = false;
+        quantityInput.classList.remove('invalid');
+      }
+    }
+
+    // When product select changes
+    productSelect.addEventListener('change', () => {
+      const key = productSelect.value;
+      const qty = Math.max(1, Number(quantityInput.value) || 1);
+      if (key) {
+        totalInput.value = `₱${computeTotalFor(key, qty).toFixed(2)}`;
+      } else {
+        totalInput.value = '';
+      }
+      updateAvailableStockDisplay(key);
+      updateCurrentDateTimeField();
+    });
+
+    // When qty changes
+    quantityInput.addEventListener('input', () => {
+      const key = productSelect.value;
+      const qty = Math.max(1, Number(quantityInput.value) || 1);
+      if (key) totalInput.value = `₱${computeTotalFor(key, qty).toFixed(2)}`;
+      else totalInput.value = '';
+      validateAddButton();
+      updateCurrentDateTimeField();
+    });
+
+    // init date/time
+    updateCurrentDateTimeField();
+    setInterval(() => {
+      if (!editModal || editModal.classList.contains('hidden')) updateCurrentDateTimeField();
+    }, 60*1000);
+
+    // Render sales table (newest on top)
+    function renderSalesTable() {
+      salesTable.querySelectorAll('.sale-row').forEach(n => n.remove());
+      const sales = getSalesData().slice().sort((a,b) => Number(b.id) - Number(a.id));
+      if (!sales || sales.length === 0) {
+        if (salesEmpty) salesEmpty.style.display = '';
+      } else {
+        if (salesEmpty) salesEmpty.style.display = 'none';
+        sales.forEach(sale => {
+          const row = createSaleRowElement(sale);
+          salesTable.appendChild(row);
+        });
+      }
+      applySalesFilters();
+    }
+
+    function createSaleRowElement(sale) {
+      const row = document.createElement('div');
+      row.className = 'flex items-center px-4 py-3 sale-row';
+      row.dataset.id = sale.id;
+      row.dataset.product = sale.product;
+
+      row.innerHTML = `
+        <div class="w-1/4 text-sm">${escapeHtml(sale.datetime)}</div>
+        <div class="w-1/5 text-sm">${escapeHtml(capitalize(sale.product))}</div>
+        <div class="w-1/6 text-sm">${Number(sale.qty)}</div>
+        <div class="w-1/4 text-sm">₱${Number(sale.total).toFixed(2)}</div>
+        <div class="w-1/6 text-right">
+          <button class="editSale inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm mr-2 hover:bg-gray-50">Edit</button>
+          <button class="deleteSale inline-flex items-center px-3 py-1.5 border border-red-300 rounded-md text-sm text-red-600 hover:bg-red-50">Delete</button>
+        </div>
+      `;
+
+      const editBtn = row.querySelector('.editSale');
+      const deleteBtn = row.querySelector('.deleteSale');
+
+      editBtn.addEventListener('click', () => {
+        const saleId = row.dataset.id;
+        const sales = getSalesData();
+        const sale = sales.find(s => String(s.id) === String(saleId));
+        if (!sale) return alert('Sale not found.');
+        // preload edit modal
+        editDateTime.value = sale.datetime;
+        editProduct.value = sale.product;
+        editQty.value = sale.qty;
+        editTotal.value = `₱${Number(sale.total).toFixed(2)}`;
+        editModal.dataset.editingId = saleId;
+        // show available for edit product
+        updateEditAvailableDisplay(sale.product);
+        openModal(editModal);
+      });
+
+      deleteBtn.addEventListener('click', () => {
+        const saleId = row.dataset.id;
+        deleteText.textContent = `Are you sure you want to delete the sale of "${capitalize(row.dataset.product)}" on ${row.children[0].textContent.trim()}?`;
+        deleteModal.dataset.targetId = saleId;
+        openModal(deleteModal);
+      });
+
+      return row;
+    }
+
+    // Add sale
+    addToSalesBtn.addEventListener('click', () => {
+      const product = productSelect.value;
+      const qty = Math.max(1, Number(quantityInput.value) || 1);
+
+      if (!product) {
+        alert('Please choose a product.');
+        return;
+      }
+
+      const inv = findInventoryItem(product);
+      if (!inv) {
+        showToast('Delete', `⚠️ No inventory record for ${capitalize(product)}.`, 'red');
+        return;
+      }
+      if (qty > Number(inv.quantity)) {
+        showToast('Delete', `⚠️ Not enough stock (only ${inv.quantity} left).`, 'red');
+        return;
+      }
+
+      // create sale and persist
+      const datetime = formatDateTime(new Date());
+      const total = computeTotalFor(product, qty);
+      const sale = { id: Date.now().toString(), datetime, product, qty, total };
+
+      const allSales = getSalesData();
+      allSales.push(sale);
+      setSalesData(allSales);
+
+      // deduct inventory and persist
+      const invAll = getInventoryData();
+      const idx = invAll.findIndex(i => (i.product||'').toLowerCase() === product.toLowerCase());
+      if (idx !== -1) {
+        invAll[idx].quantity = Number(invAll[idx].quantity) - qty;
+        // keep total field unchanged (assumed value)
+        setInventoryData(invAll);
+      }
+
+      renderSalesTable();
+
+      // toast success
+      showToast('Add', `✅ Sale added: ${capitalize(product)} (${qty})`, 'green', false);
+
+      // reset form
+      productSelect.value = '';
+      quantityInput.value = 1;
+      totalInput.value = '';
+      availableStockEl.style.display = 'none';
+      validateAddButton();
+      updateCurrentDateTimeField();
+    });
+
+    // Edit save (with inventory adjustments & undo)
+    saveEditBtn.addEventListener('click', () => {
+      const editingId = editModal.dataset.editingId;
+      if (!editingId) return closeModal(editModal);
+
+      const newProduct = editProduct.value;
+      const newQty = Math.max(1, Number(editQty.value) || 1);
+
+      const allSales = getSalesData();
+      const idx = allSales.findIndex(s => String(s.id) === String(editingId));
+      if (idx === -1) return alert('Sale not found.');
+
+      const oldSale = { ...allSales[idx] }; // snapshot for undo
+
+      // check inventory availability: we must add back oldSale.qty to its product, then deduct newQty from newProduct
+      const invAll = getInventoryData();
+
+      // compute available quantities as if old sale has been reversed first
+      // temporarily adjust copy
+      const invCopy = invAll.map(i => ({...i}));
+
+      // revert old sale to inventory (add back)
+      const oldInvIdx = invCopy.findIndex(i => (i.product||'').toLowerCase() === (oldSale.product||'').toLowerCase());
+      if (oldInvIdx !== -1) invCopy[oldInvIdx].quantity = Number(invCopy[oldInvIdx].quantity) + Number(oldSale.qty);
+
+      // now attempt to deduct from newProduct
+      const newInvIdx = invCopy.findIndex(i => (i.product||'').toLowerCase() === (newProduct||'').toLowerCase());
+      if (newInvIdx === -1) {
+        showToast('Delete', `⚠️ No inventory record for ${capitalize(newProduct)}. Edit cancelled.`, 'red');
+        return;
+      }
+      if (newQty > Number(invCopy[newInvIdx].quantity)) {
+        showToast('Delete', `⚠️ Not enough stock for ${capitalize(newProduct)} (only ${invCopy[newInvIdx].quantity} left). Edit cancelled.`, 'red');
+        return;
+      }
+
+      // PASS: apply changes:
+      // 1) update sales record
+      const newTotal = computeTotalFor(newProduct, newQty);
+      allSales[idx] = { ...allSales[idx], product: newProduct, qty: newQty, total: newTotal };
+      setSalesData(allSales);
+
+      // 2) update real inventory: add back oldSale.qty then deduct newQty from newProduct
+      const realInv = getInventoryData();
+      const oldInvRealIdx = realInv.findIndex(i => (i.product||'').toLowerCase() === (oldSale.product||'').toLowerCase());
+      if (oldInvRealIdx !== -1) realInv[oldInvRealIdx].quantity = Number(realInv[oldInvRealIdx].quantity) + Number(oldSale.qty);
+
+      const newInvRealIdx = realInv.findIndex(i => (i.product||'').toLowerCase() === (newProduct||'').toLowerCase());
+      if (newInvRealIdx !== -1) realInv[newInvRealIdx].quantity = Number(realInv[newInvRealIdx].quantity) - newQty;
+
+      setInventoryData(realInv);
+
+      closeModal(editModal);
+      renderSalesTable();
+
+      // set lastEdited snapshot for undo (contains oldSale)
+      if (lastEdited && lastEdited.timeoutId) { clearTimeout(lastEdited.timeoutId); lastEdited = null; }
+      lastEdited = { oldSale, timeoutId: setTimeout(() => { lastEdited = null; }, 3000) };
+
+      showToast('Edit', `✏️ Changes saved for ${capitalize(newProduct)} (${newQty})`, 'blue', true);
+    });
+
+    cancelEditBtn.addEventListener('click', () => {
+      editModal.dataset.editingId = '';
+      closeModal(editModal);
+    });
+
+    // Delete confirmation
+    confirmDelete.addEventListener('click', () => {
+      const saleId = deleteModal.dataset.targetId;
+      if (!saleId) { closeModal(deleteModal); return; }
+
+      const allSales = getSalesData();
+      const idx = allSales.findIndex(s => String(s.id) === String(saleId));
+      if (idx === -1) { closeModal(deleteModal); return; }
+
+      const removed = allSales.splice(idx,1)[0];
+      setSalesData(allSales);
+
+      // restore inventory (add back removed.qty)
+      const invAll = getInventoryData();
+      const invIdx = invAll.findIndex(i => (i.product||'').toLowerCase() === (removed.product||'').toLowerCase());
+      if (invIdx !== -1) {
+        invAll[invIdx].quantity = Number(invAll[invIdx].quantity) + Number(removed.qty);
+        setInventoryData(invAll);
+      }
+
+      closeModal(deleteModal);
+      renderSalesTable();
+
+      // set lastDeleted for undo
+      if (lastDeleted && lastDeleted.timeoutId) { clearTimeout(lastDeleted.timeoutId); lastDeleted = null; }
+      lastDeleted = { sale: removed, timeoutId: setTimeout(() => { lastDeleted = null; }, 3000) };
+
+      showToast('Delete', `🗑️ Sale deleted: ${capitalize(removed.product)} (${removed.qty})`, 'red', true);
+    });
+
+    cancelDelete.addEventListener('click', () => {
+      deleteModal.dataset.targetId = '';
+      closeModal(deleteModal);
+    });
+
+    // Search + filter
+    function applySalesFilters() {
+      const text = (searchSales.value || '').toLowerCase().trim();
+      const productFilter = (filterProduct.value || 'all').toLowerCase();
+
+      const rows = Array.from(salesTable.querySelectorAll('.sale-row'));
+
+      if (rows.length === 0) {
+        if (salesEmpty) salesEmpty.style.display = '';
+      } else {
+        if (salesEmpty) salesEmpty.style.display = 'none';
+      }
+
+      rows.forEach(row => {
+        const dateText = row.children[0].textContent.toLowerCase();
+        const prodText = (row.dataset.product || '').toLowerCase();
+        const textMatch = dateText.includes(text) || prodText.includes(text);
+        const productMatch = productFilter === 'all' || prodText === productFilter;
+        row.style.display = (textMatch && productMatch) ? '' : 'none';
+      });
+    }
+
+    searchSales.addEventListener('input', applySalesFilters);
+    filterProduct.addEventListener('change', applySalesFilters);
+
+    // Modal helpers
+    function openModal(modal) {
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+      document.body.classList.add('modal-open');
+    }
+    function closeModal(modal) {
+      modal.classList.add('hidden');
+      modal.style.display = '';
+      document.body.classList.remove('modal-open');
+    }
+
+    // Edit modal available display
+    function updateEditAvailableDisplay(productKey) {
+      if (!productKey) { editAvailable.style.display = 'none'; return; }
+      const it = findInventoryItem(productKey);
+      if (!it) { editAvailable.style.display = 'none'; return; }
+      editAvailable.style.display = 'block';
+      editAvailable.textContent = `Available stock: ${Number(it.quantity)} pcs`;
+    }
+
+    editProduct.addEventListener('change', () => {
+      updateEditAvailableDisplay(editProduct.value);
+      // update editTotal using hidden price
+      const qty = Math.max(1, Number(editQty.value) || 1);
+      if (editProduct.value) editTotal.value = `₱${computeTotalFor(editProduct.value, qty).toFixed(2)}`;
+    });
+    editQty.addEventListener('input', () => {
+      const qty = Math.max(1, Number(editQty.value) || 1);
+      if (editProduct.value) editTotal.value = `₱${computeTotalFor(editProduct.value, qty).toFixed(2)}`;
+      // optionally validate over available stock here (but saveEdit checks)
+    });
+
+    // Toast system (with Undo)
+    function showToast(typeName, message, color, withUndo=false) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      const colorMap = { green: '#10b981', blue: '#2563eb', red: '#ef4444' };
+      const leftColor = colorMap[color] || '#10b981';
+      toast.innerHTML = `
+        <div class="left-border" style="background:${leftColor}"></div>
+        <div class="content">
+          <div class="text-sm">${escapeHtml(message)}</div>
+        </div>
+        <div class="actions">
+          ${withUndo ? '<div class="undo">Undo</div>' : ''}
+        </div>
+      `;
+      toastContainer.appendChild(toast);
+      if (toastContainer.children.length > 5) toastContainer.removeChild(toastContainer.firstChild);
+
+      if (withUndo) {
+        const undoEl = toast.querySelector('.undo');
+        undoEl.addEventListener('click', () => {
+          // Undo for delete
+          if (lastDeleted && lastDeleted.sale) {
+            const sale = lastDeleted.sale;
+            // restore sale to salesData (push back)
+            const allSales = getSalesData();
+            allSales.push(sale);
+            setSalesData(allSales);
+            // deduct inventory again
+            const inv = getInventoryData();
+            const idx = inv.findIndex(i => (i.product||'').toLowerCase() === (sale.product||'').toLowerCase());
+            if (idx !== -1) {
+              inv[idx].quantity = Number(inv[idx].quantity) - Number(sale.qty);
+              setInventoryData(inv);
+            }
+            clearTimeout(lastDeleted.timeoutId);
+            lastDeleted = null;
+            toast.querySelector('.content').innerHTML = '<div class="text-sm">🔁 Sale restored</div>';
+            renderSalesTable();
+            setTimeout(() => dismissToast(toast), 900);
+            return;
+          }
+
+          // Undo for edit
+          if (lastEdited && lastEdited.oldSale) {
+            const old = lastEdited.oldSale;
+            let allSales = getSalesData();
+            const idx = allSales.findIndex(s => String(s.id) === String(old.id));
+            // find currentSale (after edit) to compute inventory revert
+            const currentSale = allSales.find(s => String(s.id) === String(old.id));
+            // revert sale record
+            if (idx !== -1) {
+              allSales[idx] = old;
+            } else {
+              allSales.push(old);
+            }
+            setSalesData(allSales);
+
+            // revert inventory: add back currentSale.qty, then deduct old.qty
+            const inv = getInventoryData();
+            if (currentSale) {
+              const curIdx = inv.findIndex(i => (i.product||'').toLowerCase() === (currentSale.product||'').toLowerCase());
+              if (curIdx !== -1) inv[curIdx].quantity = Number(inv[curIdx].quantity) + Number(currentSale.qty);
+            }
+            const oldIdx = inv.findIndex(i => (i.product||'').toLowerCase() === (old.product||'').toLowerCase());
+            if (oldIdx !== -1) inv[oldIdx].quantity = Number(inv[oldIdx].quantity) - Number(old.qty);
+            setInventoryData(inv);
+
+            clearTimeout(lastEdited.timeoutId);
+            lastEdited = null;
+            toast.querySelector('.content').innerHTML = '<div class="text-sm">🔁 Edit reverted</div>';
+            renderSalesTable();
+            setTimeout(() => dismissToast(toast), 900);
+            return;
+          }
+
+          toast.querySelector('.content').innerHTML = '<div class="text-sm">Nothing to undo</div>';
+          setTimeout(() => dismissToast(toast), 900);
+        });
+      }
+
+      const outTimer = setTimeout(() => {
+        dismissToast(toast);
+        if (withUndo) {
+          if (lastDeleted && lastDeleted.timeoutId) { clearTimeout(lastDeleted.timeoutId); lastDeleted = null; }
+          if (lastEdited && lastEdited.timeoutId) { clearTimeout(lastEdited.timeoutId); lastEdited = null; }
+        }
+      }, 3000);
+
+      toast.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('undo')) {
+          clearTimeout(outTimer);
+          dismissToast(toast);
+        }
+      });
+
+      return toast;
+    }
+
+    function dismissToast(toast) {
+      if (!toast) return;
+      toast.style.animation = 'toast-out .12s ease forwards';
+      setTimeout(() => { if (toast.parentElement) toast.parentElement.removeChild(toast); }, 120);
+    }
+
+    // small helpers
+    function capitalize(s) { if (!s) return ''; return s.charAt(0).toUpperCase() + s.slice(1); }
+    function escapeHtml(unsafe) { return String(unsafe || '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
+
+    // storage event listener (sync across tabs/pages)
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'salesData' || e.key === 'inventoryData' || e.key === null) {
+        renderSalesTable();
+        // if product selected, update available display
+        updateAvailableStockDisplay(productSelect.value);
+      }
+    });
+
+    // Close modals with Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (editModal && !editModal.classList.contains('hidden')) closeModal(editModal);
+        if (deleteModal && !deleteModal.classList.contains('hidden')) closeModal(deleteModal);
+      }
+    });
+
+    // init
+    (function init() {
+      // enable add button only when product chosen & qty allowed
+      validateAddButton();
+      renderSalesTable();
+    })();
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+/*Dashboard Page*/
+ body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .logo {
+            width: 150px; /* Example size */
+            height: 50px; /* Example size */
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #808080;
+            padding-top: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            color: rgb(0, 0, 0);
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            text-align: center;
+            display: block;
+            color: rgb(0, 0, 0);
+            padding: 10px;
+            text-decoration: none;
+            margin: 5px 0;
+        }
+        .sidebar a:hover {
+            background: #b6b6b6;
+        }
+        .Dashboard{
+            background: #b6b6b6;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            width: 100%;
+        }
+/*Sales Page*/
+        .Sales{
+            background: #b6b6b6;
+        }
+
+
+/*Inventory Page*/
+        .Inventory{
+            background: #b6b6b6;
+        }
+
+
+/*Reports Page*/
+        .Reports{
+            background: #b6b6b6;
+        }
+
+
+/*Notifications Page*/
+        .Notifications{
+            background: #b6b6b6;
+        }
+
+
+/*Settings Page*/
+        .Settings{
+            background: #b6b6b6;
+        }
+
+
+/*User Management Page*/
+        .UserM{
+            background: #b6b6b6;
+        }
