@@ -1,169 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Alfa+Slab+One&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AUG DEPT.</title>
+  <link rel="icon" type="image/x-icon" href="https://placehold.co/32x32/FFFFFF/000000?text=AD">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Alfa+Slab+One&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .font-alfa {
-            font-family: 'Alfa Slab One', cursive;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
-        }
-        /* Custom styles for an active link */
-        .sidebar-link.active {
-            background-color: #e5e7eb; /* gray-200 */
-            color: #1f2937; /* gray-800 */
-        }
-        .sidebar-link.active svg {
-             color: #719cd8; /* gray-800 */
-        }
-    </style>
+    body { font-family: 'Inter', sans-serif; }
+    .font-alfa { font-family: 'Alfa Slab One', cursive; }
+    .card-number { font-size: 1.5rem; font-weight: 700; }
+    canvas { width: 100% !important; height: 320px !important; }
+  </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
+  <div class="flex h-full min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white flex flex-col border-r border-gray-700 flex-shrink-0">
+  <div class="h-20 flex items-center justify-center border-b border-gray-700">
+    <h1 class="font-alfa text-4xl tracking-wider text-white">AUG DEPT.</h1>
+  </div>
 
-    <div class="h-screen flex overflow-hidden">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white flex flex-col border-r flex-shrink-0">
-            <!-- Logo -->
-            <div class="h-20 flex items-center justify-center border-b">
-                <h1 class="font-alfa text-4xl tracking-wider">AUG DEPT.</h1>
-            </div>
-            <!-- Navigation Links -->
-            <nav class="flex-1 px-4 py-6 space-y-2">
-                <a href="Dashboard.html" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-                    Dashboard
-                </a>
-                <a href="#" class="sidebar-link active flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                    Sales
-                </a>
-                <a href="Inventory.html" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
-                    Inventory
-                </a>
-                <a href="#" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 00-4-4H3a2 2 0 00-2 2v6a2 2 0 002 2h2a4 4 0 004-4zm0 0v-2a4 4 0 014-4h2a4 4 0 014 4v2m-6 4h6m-6-4v6m0-6H9" /></svg>
-                    Reports
-                </a>
-                <a href="#" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                    Notifications
-                </a>
-                 <a href="#" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                    Settings (Admin only)</span>
-                </a>
-                <a href="#" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                    User Management (Admin only)</span>
-                </a>
-            </nav>
-            <!-- Logout Button -->
-            <div class="px-4 py-6 border-t border-gray-200">
-                 <a href="#" class="sidebar-link flex items-center text-gray-600 hover:bg-gray-200 py-2.5 px-4 rounded-lg transition duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                    Logout
-                </a>
-            </div>
-        </aside>
+  <nav class="flex-1 px-4 py-6 space-y-2">
+    <a href="Dashboard.html" class="sidebar-link flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 transition-all duration-300 ease-in-out hover:scale-105">
+      Dashboard 
+    </a>
+    <a href="Sales.html" class="sidebar-link flex items-center py-2.5 px-4 rounded-lg bg-gray-900 text-white transition-all duration-300 ease-in-out hover:bg-gray-700 hover:scale-105">
+      Sales
+    </a>
+    <a href="Inventory.html" class="sidebar-link flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 transition-all duration-300 ease-in-out hover:scale-105">
+      Inventory
+    </a>
+  </nav>
 
-        <!-- Main content -->
-        <main class="flex-1 p-8 overflow-y-auto">
-            <h2 class="text-3xl font-bold mb-8">Sales</h2>
+  <div class="px-4 py-6 border-t border-gray-700">
+    <a href="index.html" class="sidebar-link flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 transition-all duration-300 ease-in-out hover:scale-105">
+      Logout
+    </a>
+  </div>
+</aside>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Sales Entry Card -->
-                <div class="bg-white p-6 rounded-lg border border-gray-200">
-                    <h3 class="text-xl font-semibold mb-6">Sales Entry</h3>
-                    <form class="space-y-6">
-                        <div>
-                            <label for="product-name" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                            <input type="text" id="product-name" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-                            <input type="number" id="quantity" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div class="flex items-end space-x-4">
-                            <div class="flex-1">
-                                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">Price</label>
-                                <input type="number" id="price" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                            </div>
-                            <button type="button" class="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Add to Cart</button>
-                        </div>
-                         <div>
-                            <label for="total" class="block text-sm font-medium text-gray-700 mb-1">Total</label>
-                            <input type="text" id="total" class="w-full bg-gray-100 border-gray-300 rounded-md shadow-sm" readonly>
-                        </div>
-                        <div class="pt-2">
-                             <button type="submit" class="w-full py-2.5 px-4 bg-gray-800 text-white font-semibold rounded-md shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800">Generate Receipt</button>
-                        </div>
-                    </form>
-                </div>
+<script>
+  // Add fade-out transition when clicking a sidebar link
+  const links = document.querySelectorAll('.sidebar-link');
 
-                <!-- Sales Record Card -->
-                <div class="bg-white p-6 rounded-lg border border-gray-200">
-                    <h3 class="text-xl font-semibold mb-6">Sales Record</h3>
-                    <div class="relative mb-4">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <input type="text" placeholder="Search" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    
-                    <!-- Table Header -->
-                    <div class="flex text-sm font-semibold text-gray-500 border-b pb-2">
-                        <div class="w-1/4">Date</div>
-                        <div class="w-1/4">Customer</div>
-                        <div class="w-1/2">Product</div>
-                    </div>
-                    
-                    <!-- Table Body -->
-                    <div class="space-y-4 mt-4 h-64 overflow-y-auto">
-                        <!-- Placeholder rows -->
-                        <div class="flex items-center text-sm text-gray-600" v-for="i in 8">
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-20"></div></div>
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-24"></div></div>
-                            <div class="w-1/2"><div class="h-2.5 bg-gray-200 rounded-full w-32"></div></div>
-                        </div>
-                        <div class="flex items-center text-sm text-gray-600" v-for="i in 8">
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-20"></div></div>
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-24"></div></div>
-                            <div class="w-1/2"><div class="h-2.5 bg-gray-200 rounded-full w-32"></div></div>
-                        </div>
-                        <div class="flex items-center text-sm text-gray-600" v-for="i in 8">
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-20"></div></div>
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-24"></div></div>
-                            <div class="w-1/2"><div class="h-2.5 bg-gray-200 rounded-full w-32"></div></div>
-                        </div>
-                        <div class="flex items-center text-sm text-gray-600" v-for="i in 8">
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-20"></div></div>
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-24"></div></div>
-                            <div class="w-1/2"><div class="h-2.5 bg-gray-200 rounded-full w-32"></div></div>
-                        </div>
-                        <div class="flex items-center text-sm text-gray-600" v-for="i in 8">
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-20"></div></div>
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-24"></div></div>
-                            <div class="w-1/2"><div class="h-2.5 bg-gray-200 rounded-full w-32"></div></div>
-                        </div>
-                         <div class="flex items-center text-sm text-gray-600" v-for="i in 8">
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-20"></div></div>
-                            <div class="w-1/4"><div class="h-2.5 bg-gray-200 rounded-full w-24"></div></div>
-                            <div class="w-1/2"><div class="h-2.5 bg-gray-200 rounded-full w-32"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+  links.forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault(); // stop instant navigation
+      document.body.classList.add('opacity-0', 'transition-opacity', 'duration-100');
+      setTimeout(() => {
+        window.location = this.href; // navigate after fade-out
+      }, 400); // wait for animation to finish
+    });
+  });
 
+  // Fade-in effect when the page loads
+  window.addEventListener('load', () => {
+    document.body.classList.remove('opacity-0');
+    document.body.classList.add('opacity-100', 'transition-opacity', 'duration-100');
+  });
+</script>
+
+
+    <!-- Main content -->
+    <main class="flex-1 p-8 overflow-y-auto bg-gray-50">
+      <h2 class="text-3xl font-bold mb-8">Sales</h2>
+
+      <!-- Search -->
+        <class id="searchSales">
+
+      <!-- Product List -->
+      <div class="border border-black rounded-lg overflow-hidden mb-10 flex-1 overflow-y-auto bg-white">
+        <div class="flex text-sm font-semibold text-gray-600 bg-gray-50 px-6 py-3 border-b border-black bg-white">
+          <div class="w-1/4">Product</div>
+          <div class="w-1/6">Category</div>
+          <div class="w-1/6">Size</div>
+          <div class="w-1/6">Quantity</div>
+          <div class="w-1/6">Price (₱)</div>
+          <div class="w-1/6 text-right">Action</div>
+        </div>
+        <div id="salesTable" class="divide-y divide-gray-200 min-h-[120px] border-black">
+          <div id="noSales" class="px-6 py-8 text-center text-gray-500">
+            No products available. Add some in Inventory.
+          </div>
+        </div>
+      </div>
+
+      <!-- Sales Record Section -->
+      <h3 class="text-2xl font-bold mb-4">Sales History</h3>
+      <div class="border border-black rounded-lg overflow-hidden mb-6 flex-1 overflow-y-auto bg-white">
+        <div class="flex text-sm font-semibold text-gray-600 bg-gray-50 px-6 py-3 border-b border-black bg-white">
+          <div class="w-1/4">Product</div>
+          <div class="w-1/6">Category</div>
+          <div class="w-1/6">Size</div>
+          <div class="w-1/6">Quantity Sold</div>
+          <div class="w-1/6">Date</div>
+          <div class="w-1/6">Subtotal (₱)</div>
+        </div>
+        <div id="salesRecordsTable" class="divide-y divide-gray-200 min-h-[100px] border-black">
+          <div id="noRecords" class="px-6 py-8 text-center text-gray-500">
+            No sales recorded yet.
+          </div>
+        </div>
+      </div>
+
+      <!-- ✅ Clear Data Button -->
+      <div class="mt-10 text-center">
+        <button id="clearData" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">
+          Clear All Data
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const salesTable = document.getElementById('salesTable');
+    const noSales = document.getElementById('noSales');
+    const searchSales = document.getElementById('searchSales');
+    const recordsTable = document.getElementById('salesRecordsTable');
+    const noRecords = document.getElementById('noRecords');
+
+    function getInventoryData() {
+      try { return JSON.parse(localStorage.getItem('inventoryData')) || []; }
+      catch { return []; }
+    }
+    function setInventoryData(arr) {
+      localStorage.setItem('inventoryData', JSON.stringify(arr));
+    }
+
+    function getSalesRecords() {
+      try { return JSON.parse(localStorage.getItem('salesRecords')) || []; }
+      catch { return []; }
+    }
+    function setSalesRecords(arr) {
+      localStorage.setItem('salesRecords', JSON.stringify(arr));
+    }
+
+    function renderSales() {
+      const data = getInventoryData();
+      salesTable.querySelectorAll('.sales-row').forEach(e => e.remove());
+      if (!data.length) { noSales.style.display = ''; return; }
+      noSales.style.display = 'none';
+
+      data.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center px-6 py-4 sales-row';
+        row.dataset.category = item.category.toLowerCase();
+
+        const unitPrice = item.quantity > 0 ? (item.total / item.quantity) : 0;
+
+        row.innerHTML = `
+          <div class="w-1/4 text-sm">${item.product}</div>
+          <div class="w-1/6 text-sm">${capitalize(item.category)}</div>
+          <div class="w-1/6 text-sm">${item.size || '-'}</div>
+          <div class="w-1/6 text-sm">${item.quantity}</div>
+          <div class="w-1/6 text-sm">₱${unitPrice.toFixed(2)}</div>
+          <div class="w-1/6 text-right">
+            <button class="sellBtn px-3 py-1.5 border rounded-md text-sm bg-blue-600 text-white hover:bg-blue-700">Sell</button>
+          </div>
+        `;
+        salesTable.appendChild(row);
+      });
+    }
+
+    function renderSalesRecords() {
+      const records = getSalesRecords();
+      recordsTable.querySelectorAll('.record-row').forEach(e => e.remove());
+      if (!records.length) { noRecords.style.display = ''; return; }
+      noRecords.style.display = 'none';
+
+      records.forEach(r => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center px-6 py-4 record-row text-sm';
+        row.dataset.category = r.category ? r.category.toLowerCase() : '';
+
+        row.innerHTML = `
+          <div class="w-1/4">${r.product}</div>
+          <div class="w-1/6">${capitalize(r.category)}</div>
+          <div class="w-1/6">${r.size || '-'}</div>
+          <div class="w-1/6">${r.quantity}</div>
+          <div class="w-1/6">${r.date}</div>
+          <div class="w-1/6">₱${r.subtotal.toFixed(2)}</div>
+        `;
+        recordsTable.appendChild(row);
+      });
+    }
+
+    function capitalize(s){return s ? s[0].toUpperCase()+s.slice(1) : ''; }
+
+    // Sell button action
+    salesTable.addEventListener('click', (e) => {
+      if (!e.target.classList.contains('sellBtn')) return;
+      const row = e.target.closest('.sales-row');
+      const categoryName = row.dataset.category;
+      const productName = row.children[0].innerText;
+      const size = row.children[2].innerText === '-' ? '' : row.children[2].innerText;
+      const inventory = getInventoryData();
+
+      const item = inventory.find(i => 
+        i.product.toLowerCase() === productName.toLowerCase() &&
+        i.category.toLowerCase() === categoryName &&
+        (i.size || '') === size
+      );
+
+      if (!item) return alert('Item not found!');
+      if (item.quantity <= 0) return alert('Out of stock!');
+
+      const sellQty = parseInt(prompt(`How many ${item.product}${size ? ' (' + size + ')' : ''} do you want to sell?`, 1));
+      if (isNaN(sellQty) || sellQty <= 0) return;
+      if (sellQty > item.quantity) return alert('Not enough stock!');
+
+      const unitPrice = item.total / item.quantity;
+      const subtotal = unitPrice * sellQty;
+      item.quantity -= sellQty;
+      item.total -= subtotal;
+
+      const now = new Date();
+      const date = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+      const category = item.category;
+      const salesRecords = getSalesRecords();
+      salesRecords.push({
+        product: item.product,
+        category,
+        size,
+        quantity: sellQty,
+        date,
+        subtotal
+      });
+
+      setInventoryData(inventory);
+      setSalesRecords(salesRecords);
+      renderSales();
+      renderSalesRecords();
+      alert(`Sold ${sellQty} ${item.product}${size ? ' (' + size + ')' : ''} successfully!`);
+    });
+
+    // ✅ Search category filter (for both tables)
+    searchSales.addEventListener('input', () => {
+      const search = searchSales.value.toLowerCase();
+      document.querySelectorAll('.sales-row').forEach(row => {
+        const category = row.dataset.category;
+        row.style.display = category.includes(search) ? '' : 'none';
+      });
+      document.querySelectorAll('.record-row').forEach(row => {
+        const category = row.dataset.category;
+        row.style.display = category.includes(search) ? '' : 'none';
+      });
+    });
+
+    // ✅ Clear Data Button Function
+    document.getElementById('clearData').addEventListener('click', () => {
+      if (confirm("Are you sure you want to clear all saved data?")) {
+        localStorage.clear();
+        alert("All data has been cleared!");
+        location.reload();
+      }
+    });
+
+    renderSales();
+    renderSalesRecords();
+  </script>
 </body>
 </html>

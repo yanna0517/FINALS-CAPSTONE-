@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALASKA UNDERGROUND DEPARTMENT</title>
-    <link rel="icon" type="image/png" href="/image/logo.png">
+    <title>AUG DEPT.</title>
+    <link rel="icon" type="image/x-icon" href="./image/logo.png">
     <style>
         /* --- FONT --- */
-        /* This imports a font similar to the one in the image */
         @import url('https://fonts.googleapis.com/css2?family=Tinos:wght@700&family=Roboto:wght@400&display=swap');
 
         /* --- BASIC SETUP --- */
-        body, html {
+        html, body {
             height: 100%;
             margin: 0;
             font-family: 'Roboto', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f0f0f0; /* Fallback color */
-            
-            /* --- BACKGROUND IMAGE --- */
-            background-image: url('./image/main.jpg'); 
-            background-position: center;
-            background-repeat: no-repeat;
+            overflow: hidden;
+        }
+
+        /* --- HERO BACKGROUND --- */
+        body {
+            background: url('./image/background.jpg') no-repeat center center fixed;
             background-size: cover;
+            background-attachment: fixed;
         }
 
         /* --- MAIN TITLE --- */
@@ -33,31 +33,32 @@
             top: 25px;
             left: 50%;
             transform: translateX(-50%);
-            color: #000;
-            font-family: 'Tinos', serif; /* Special font for the title */
+            color: #fff;
+            font-family: 'Tinos', serif;
             font-size: 2.5rem;
             font-weight: 700;
             letter-spacing: 1px;
-            white-space: nowrap; /* Prevents title from wrapping on small screens */
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
         }
 
         /* --- LOGIN FORM CONTAINER --- */
         .login-container {
-            background-color: rgba(220, 220, 220, 0.9); /* Light grey with slight transparency */
+            background-color: rgba(0, 0, 0, 0.85); /* Transparent dark box */
             padding: 50px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
             width: 100%;
             max-width: 350px;
             text-align: center;
+            backdrop-filter: blur(5px);
         }
 
         .login-container h2 {
             margin: 0 0 30px 0;
             font-family: 'Tinos', serif;
-            color: #333;
+            color: #ffffff;
             letter-spacing: 1px;
-            font-size: 1.5rem;
+            font-size: 2rem;
         }
 
         /* --- FORM FIELDS --- */
@@ -70,7 +71,7 @@
             display: block;
             margin-bottom: 5px;
             font-size: 0.75rem;
-            color: #555;
+            color: #ffffff;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -78,10 +79,12 @@
         .input-group input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ccc;
+            border: 1px solid #ffffff;
             border-radius: 4px;
-            box-sizing: border-box; /* Important for padding and width */
+            box-sizing: border-box;
             font-size: 1rem;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
         }
 
         /* --- LOGIN BUTTON --- */
@@ -89,15 +92,14 @@
             background-color: #f9f9f9;
             color: #333;
             border: 1px solid #bbb;
-            padding: 8px 16px;
-            font-size: 0.8rem;
+            padding: 10px 20px;
+            font-size: 0.9rem;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s, border-color 0.3s;
-            margin-top: 10px; /* Space above the button */
+            transition: all 0.3s ease;
         }
 
         .login-button:hover {
@@ -121,19 +123,48 @@
 <body>
 
     <div class="login-container">
-        <h2>LOG IN</h2>
-        <form action="Dashboard.html" method="post">
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username">
-            </div>
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password">
-            </div>
-            <button type="submit" class="login-button">Log In</button>
-        </form>
+  <h2>LOG IN</h2>
+  <form id="loginForm" action="Dashboard.html" method="post">
+    <div class="input-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username">
     </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password">
+    </div>
+    <button type="submit" class="login-button">Log In</button>
+  </form>
+</div>
+
+<style>
+  /* Transition Effect */
+  body {
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  body.loaded {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  // Fade-in when page loads
+  window.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('loaded');
+  });
+
+  // Fade-out when submitting form
+  const form = document.getElementById('loginForm');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent immediate redirect
+    document.body.classList.remove('loaded');
+    setTimeout(() => {
+      window.location.href = form.getAttribute('action');
+    }, 400); // Wait for fade-out animation
+  });
+</script>
 
 </body>
 </html>
